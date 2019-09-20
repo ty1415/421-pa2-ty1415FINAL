@@ -1,0 +1,176 @@
+<!doctype html>
+
+<html lang="en">
+
+<head>
+
+    <title>Apollo</title>
+
+
+    <link rel="stylesheet" href="./style.css">
+
+    <style type="text/css">
+        #text {
+            color: crimson
+        }
+
+        buttonGroup {
+            display: none;
+            visibility: hidden !important;
+        }
+
+
+        #date {}
+
+        #query {}
+
+
+
+        #searchResults {
+            display: none;
+            visibility: hidden !important;
+        }
+
+        #time {
+            display: visible;
+            visibility: inline;
+        }
+
+        #Search {}
+
+        #body {}
+
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha384-Dziy8F2VlJQLMShA6FHWNul/veM9bCkRUaLqr199K94ntO5QUrLJBEbYegdSkkqX" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css" integrity="sha384-Nlo8b0yiGl7Dn+BgLn4mxhIIBU6We7aeeiulNCjHdUv/eKHx59s3anfSUjExbDxn" crossorigin="anonymous">
+
+
+</head>
+
+<body id="body">
+
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <h1 id=text onclick="changeBackground()">
+        <center>Apollo</center>
+    </h1>
+
+    <input align: "right" type="text" id="query">
+
+    <br>
+    <br>
+
+    <div id=buttonGroup style="margin: 0 auto; width: 656px; text-align: center;">
+        <button id="Search" onclick="apiSearch()">Search</button>
+
+        <button id="date" onclick="dateFunc(); displayTime();">Get Time</button>
+    </div>
+
+
+    <div id="searchResults">
+    </div>
+
+    <div id="time">
+
+
+
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+    <script type="text/javascript">
+        function dateFunc() {
+            document.getElementById('date').innerHTML = Date();
+
+
+        }
+
+    </script>
+
+
+
+
+
+
+    <script type="text/javascript">
+        var len;
+        var results = '';
+
+
+        function apiSearch() {
+            var params = {
+                "q": $("#query").val(),
+                "count": "50",
+                "offset": "0",
+                "mkt": "en-us"
+            };
+
+            $.ajax({
+                    url: 'https://11617983-421.cognitiveservices.azure.com/bing/v7.0/search/?' + $.param(params),
+                    beforeSend: function(xhrObj) {
+                        xhrObj.setRequestHeader("Ocp-Apim-Subscription-Key", "f2ce01954a8d43ea85c847e841e47d6d");
+                    },
+                    type: "GET",
+                })
+                .done(function(data) {
+                    len = data.webPages.value.length;
+                    for (i = 0; i < len; i++) {
+                        results += "<p><a href='" + data.webPages.value[i].url + "'>" + data.webPages.value[i].name + "</a>: " + data.webPages.value[i].snippet + "</p>";
+                    }
+
+                    $('#searchResults').html(results);
+                    $('#searchResults').dialog();
+                })
+                .fail(function() {
+                    alert("error");
+                });
+        }
+
+    </script>
+
+
+
+
+
+    <script type="text/javascript">
+        function changeBackground() {
+
+            $('#body').css('background-image', 'url(https://images.unsplash.com/photo-1568692629152-39f497a09607?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1000&q=60)');
+
+        }
+
+    </script>
+
+    <script type="text/javascript">
+        function displayTime() {
+            $("#time").dialog("open");
+
+
+        }
+
+      
+
+    </script>
+
+
+
+
+
+</body>
+
+</html>
